@@ -3,39 +3,36 @@ package com.example.AEPB.service.Impl;
 import com.example.AEPB.entity.Car;
 import com.example.AEPB.entity.Parker;
 import com.example.AEPB.entity.ParkingLot;
-import com.example.AEPB.entity.User;
+import com.example.AEPB.entity.Voucher;
 import com.example.AEPB.service.ParkingLotService;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ParkingLotServiceImpl implements ParkingLotService {
 
-    private Parker parker = new Parker();
+    private final Parker parker = new Parker();
+
     @Override
     public Boolean park(ParkingLot parkingLot, Car car) {
         return parkingLot.park(car);
     }
 
     @Override
-    public String pick(ParkingLot parkingLot, User user) {
-        return null;
+    public Boolean parkByParker(List<ParkingLot> parkingLots, Car car) {
+        return parker.parkCar(parkingLots, car);
     }
 
     @Override
-    public Boolean parkByParker(List<ParkingLot> parkingLots, Car car) {
-        parker.parkCar(parkingLots, car);
-        return null;
+    public Boolean pick(ParkingLot currentParkLot, Voucher voucher) {
+        if (currentParkLot.equals(voucher.getParkingLot())) {
+            return voucher.getParkingLot().pickCar(voucher.getCar());
+        }
+        return false;
     }
 
-//    @Override
-//    public String pick(ParkingLot parkingLot, User user) {
-//        if (parkingLot.isNotEmpty() && Objects.nonNull(user.getVoucher()) && parkingLot.isParking(user.getVoucher())) {
-////            parkingLot.PickCar(user.getVoucher());
-//            user.setVoucher(null);
-//            return "pick success";
-//        }
-//        user.setVoucher(null);
-//        return "pick failing";
-//    }
+    @Override
+    public Boolean pickByParker(List<ParkingLot> parkingLots, Voucher voucher) {
+        return parker.pickCar(parkingLots, voucher);
+    }
+
 }
