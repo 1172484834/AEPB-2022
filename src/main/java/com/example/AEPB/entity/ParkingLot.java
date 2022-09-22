@@ -12,6 +12,8 @@ import java.util.Set;
 public class ParkingLot {
     private Integer quantity;
 
+    private String parkingLotName;
+
     private Set<Car> carSet;
 
     public Boolean isUnoccupied() {

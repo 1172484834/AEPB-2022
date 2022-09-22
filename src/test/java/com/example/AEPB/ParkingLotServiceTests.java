@@ -18,55 +18,42 @@ public class ParkingLotServiceTests {
     private final ParkingLotService parkingLotService = new ParkingLotServiceImpl();
 
     @Test
-    void should_parking_one_car_success_when_park_by_user_given_park1_have_twenty_cars() {
-        ParkingLot parkingLot = ParkingLot.builder().quantity(20).carSet(new HashSet<>()).build();
+    void should_parking_one_car_success_when_park_by_user_given_park1_have_zero_cars() {
+        ParkingLot parkingLot = ParkingLot.builder()
+                .quantity(20)
+                .parkingLotName("停车场1")
+                .carSet(new HashSet<>()).build();
         Car car = Car.builder().name("车辆1").plateNumber("车牌A").build();
 
-//        String message = parkingLotService.park(parkingLot, car);
+        Boolean parkResult = parkingLotService.park(parkingLot, car);
 
-//        Assertions.assertEquals("park success", message);
+        Assertions.assertTrue(parkResult);
         Assertions.assertTrue(parkingLot.isParking(car));
         Assertions.assertEquals(19, parkingLot.getRemainCarQuantity());
     }
 
     @Test
-    void should_parking_one_car_success_when_park_by_user_given_park2_have_twenty_five_cars() {
-        ParkingLot parkingLot = ParkingLot.builder().quantity(25).carSet(new HashSet<>()).build();
-
+    void should_parking_one_car_success_when_park_by_parker_given_park1_have_zero_cars() {
+        List<ParkingLot> parkingLots = List.of(ParkingLot.builder()
+                        .quantity(20)
+                        .parkingLotName("停车场1")
+                        .carSet(new HashSet<>()).build(),
+                ParkingLot.builder()
+                        .quantity(25)
+                        .parkingLotName("停车场2")
+                        .carSet(new HashSet<>()).build());
         Car car = Car.builder().name("车辆1").plateNumber("车牌A").build();
 
-//        Assertions.assertEquals("park success", parkingLotService.park(parkingLot, user, car));
-//        Assertions.assertEquals(car, user.getVoucher().getCar());
-//        Assertions.assertEquals(user, user.getVoucher().getUser());
-        Assertions.assertEquals(9, parkingLot.getQuantity() - parkingLot.getCarSet().size());
+        Boolean parkResult = parkingLotService.parkByParker(parkingLots, car);
+
+        Assertions.assertTrue(parkResult);
+        Assertions.assertEquals(19, parkingLots.get(0).getRemainCarQuantity());
+        Assertions.assertEquals(25, parkingLots.get(1).getRemainCarQuantity());
     }
 
     @Test
-    void parking_four_cars_when_have_two_park() {
-//        ParkingLot parkingLot = ParkingLot.builder().quantity(20).carSet(new ArrayList<>()).build();
-        for (int i = 0; i < 18; i++) {
-//            parkingLot.getCarSet().add(new Car());
-        }
-        List<Car> carList = new ArrayList<>();
-        List<User> userList = new ArrayList<>();
-        for (Integer i = 1; i <= 4; i++) {
-            carList.add(Car.builder().name("车辆"+i.toString()).plateNumber("车牌"+(char)('A'+i-1)).build());
-            userList.add(User.builder().name("用户"+i.toString()).build());
-        }
+    void parking_one_car_success_when_park_by_parker_given_park1_park_full_but_park2_is_empty() {
 
-//        Assertions.assertEquals("park success", parkingLotService.park(parkingLot, userList.get(0), carList.get(0)));
-        Assertions.assertEquals(carList.get(0), userList.get(0).getVoucher().getCar());
-//        Assertions.assertEquals(userList.get(0), userList.get(0).getVoucher().getUser());
-//        Assertions.assertEquals(1, parkingLot.getQuantity() - parkingLot.getCarSet().size());
-
-//        Assertions.assertEquals("park success", parkingLotService.park(parkingLot, userList.get(1), carList.get(1)));
-        Assertions.assertEquals(carList.get(1), userList.get(1).getVoucher().getCar());
-//        Assertions.assertEquals(userList.get(1), userList.get(1).getVoucher().getUser());
-//        Assertions.assertEquals(0, parkingLot.getQuantity() - parkingLot.getCarSet().size());
-
-//        Assertions.assertEquals("park failing", parkingLotService.park(parkingLot, userList.get(0), carList.get(0)));
-
-//        Assertions.assertEquals("park failing", parkingLotService.park(parkingLot, userList.get(0), carList.get(0)));
     }
 
     @Test

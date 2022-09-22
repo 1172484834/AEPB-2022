@@ -10,9 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Parker {
-    List<ParkingLot> parkingLots;
 
-    private Boolean parkCar(Car car) {
+    public Boolean parkCar(List<ParkingLot> parkingLots, Car car) {
         for (ParkingLot parkingLot : parkingLots) {
             if (parkingLot.park(car)) {
                 return true;
