@@ -10,7 +10,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Voucher {
-    private User user;
+    private ParkingLot parkingLot;
 
     private Car car;
 
@@ -19,11 +19,11 @@ public class Voucher {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Voucher voucher = (Voucher) o;
-        return Objects.equals(user, voucher.user) && Objects.equals(car, voucher.car);
+        return Objects.equals(parkingLot, voucher.parkingLot) && Objects.equals(car, voucher.car);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, car);
+        return Objects.hash(parkingLot, car);
     }
 }

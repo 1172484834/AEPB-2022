@@ -6,7 +6,7 @@ import com.example.AEPB.entity.User;
 
 public interface ParkingLotService {
 
-    public String Park(ParkingLot parkingLot, User user, Car car);
+    public Boolean park(ParkingLot parkingLot, Car car);
 
-    public String Pick(ParkingLot parkingLot, User user);
+    public String pick(ParkingLot parkingLot, User user);
 }
