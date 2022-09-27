@@ -2,6 +2,7 @@ package com.example.AEPB;
 
 import com.example.AEPB.entity.Car;
 import com.example.AEPB.entity.ParkingLot;
+import com.example.AEPB.entity.SmartParker;
 import com.example.AEPB.entity.Voucher;
 import com.example.AEPB.service.Impl.ParkingLotServiceImpl;
 import com.example.AEPB.service.ParkingLotService;
@@ -10,6 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class ParkingLotServiceTests {
@@ -25,8 +29,8 @@ class ParkingLotServiceTests {
 
         Boolean parkResult = parkingLotService.park(parkingLot, car);
 
-        Assertions.assertTrue(parkResult);
-        Assertions.assertTrue(parkingLot.isParking(car));
+        assertTrue(parkResult);
+        assertTrue(parkingLot.isParking(car));
         Assertions.assertEquals(19, parkingLot.getRemainCarQuantity());
     }
 
@@ -37,7 +41,7 @@ class ParkingLotServiceTests {
 
         Boolean parkResult = parkingLotService.parkByParker(parkingLots, car);
 
-        Assertions.assertTrue(parkResult);
+        assertTrue(parkResult);
         Assertions.assertEquals(19, parkingLots.get(0).getRemainCarQuantity());
         Assertions.assertEquals(25, parkingLots.get(1).getRemainCarQuantity());
     }
@@ -50,10 +54,10 @@ class ParkingLotServiceTests {
 
         final Boolean parkResult = parkingLotService.parkByParker(parkingLots, car);
 
-        Assertions.assertTrue(parkResult);
+        assertTrue(parkResult);
         Assertions.assertEquals(0, parkingLots.get(0).getRemainCarQuantity());
         Assertions.assertEquals(24, parkingLots.get(1).getRemainCarQuantity());
-        Assertions.assertTrue(parkingLots.get(1).getCarSet().contains(car));
+        assertTrue(parkingLots.get(1).getCarSet().contains(car));
     }
 
     @Test
@@ -65,7 +69,7 @@ class ParkingLotServiceTests {
 
         final Boolean pickResult = parkingLotService.pick(parkingLots.get(0), voucher);
 
-        Assertions.assertTrue(pickResult);
+        assertTrue(pickResult);
         Assertions.assertFalse(parkingLots.get(0).getCarSet().contains(car));
     }
 
@@ -78,7 +82,7 @@ class ParkingLotServiceTests {
 
         final Boolean pickResult = parkingLotService.pickByParker(parkingLots, voucher);
 
-        Assertions.assertTrue(pickResult);
+        assertTrue(pickResult);
         Assertions.assertFalse(parkingLots.get(0).getCarSet().contains(car));
     }
 
@@ -91,7 +95,7 @@ class ParkingLotServiceTests {
 
         final Boolean pickResult = parkingLotService.pickByParker(parkingLots, voucher);
 
-        Assertions.assertTrue(pickResult);
+        assertTrue(pickResult);
         Assertions.assertFalse(parkingLots.get(1).getCarSet().contains(car));
     }
 
@@ -139,6 +143,34 @@ class ParkingLotServiceTests {
         final Boolean pickResult = parkingLotService.pickByParker(parkingLots, voucher);
 
         Assertions.assertFalse(pickResult);
+    }
+
+    @Test
+    void should_park_park2_when_park_by_smartParker_given_park1_remain_quantity_less_than_park2() {
+        List<ParkingLot> parkingLots = getParkingLots();
+        SmartParker smartParker = SmartParker.builder().build();
+        Car car = Car.builder().name("车辆1").plateNumber("车牌A").build();
+
+        Boolean parkResult = smartParker.parkCarByRemain(parkingLots, car);
+
+        assertTrue(parkResult);
+        assertEquals(24, parkingLots.get(1).getRemainCarQuantity());
+        assertTrue(parkingLots.get(1).getCarSet().contains(car));
+    }
+
+    @Test
+    void should_park_park1_when_park_by_smartParker_given_park1_and_park2_have_same_car() {
+        List<ParkingLot> parkingLots = getParkingLots();
+        SmartParker smartParker = SmartParker.builder().build();
+        for (int i = 0; i < 5; i++)
+            parkingLots.get(1).getCarSet().add(new Car("" + i, "" + i));
+        Car car = Car.builder().name("车辆1").plateNumber("车牌A").build();
+
+        Boolean parkResult = smartParker.parkCarByRemain(parkingLots, car);
+
+        assertTrue(parkResult);
+        assertEquals(19, parkingLots.get(0).getRemainCarQuantity());
+        assertTrue(parkingLots.get(0).getCarSet().contains(car));
     }
 
 
